@@ -103,10 +103,4 @@ English sentence segmentation implementation is based on scripts developed by Ph
 
 https://github.com/mediacloud/sentence-splitter
 
-## License
-
-This project is licensed under the [GPL-3.0](https://github.com/zejunwang1/sentence-splitter/blob/main/LICENSE).
-
-
-
 
