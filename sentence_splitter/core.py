@@ -342,8 +342,13 @@ def split_en_text_into_sentences(
         p = source.find(sentence[0], start)
         start = p + l
         #if l <= 4 and sentence.find(' ') < 0 and sentence[-1] == '.' and i < n - 1:
-        if sentence.find(' ') < 0 and i < n - 1:
+        if l <= 16 and sentence.find(' ') < 0 and i < n - 1:
             next_sentence = sentence_list[i + 1].strip()
+            if not next_sentence:
+                locations.append(p)
+                sentences.append(sentence)
+                i += 2
+                continue
             next_p = source.find(next_sentence[0], start)
             interval = next_p - start
             space = ' ' * interval
