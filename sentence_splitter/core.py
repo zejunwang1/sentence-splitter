@@ -380,20 +380,29 @@ def split_en_text_into_sentences(
                         break
                     move += 1
             if move == maxMove:
-                locations.append(p)
-                sentences.append(sentence[ : max_length])
+                origin = sentence[ : max_length]
+                strip  = origin.strip()
+                offset = origin.index(strip[0])
+                locations.append(p + offset)
+                sentences.append(strip)
                 sentence = sentence[max_length : ]
                 p += max_length
             else:
-                end = max_length - maxMove + 1
-                locations.append(p)
-                sentences.append(sentence[ : end])
+                end = max_length - move + 1
+                origin = sentence[ : end]
+                strip  = origin.strip()
+                if strip:
+                    offset = origin.index(strip[0])
+                    locations.append(p + offset)
+                    sentences.append(strip)
                 sentence = sentence[end : ]
                 p += end
             l = len(sentence)
-
-        locations.append(p)
-        sentences.append(sentence)
+        
+        strip = sentence.strip()
+        offset = sentence.index(strip[0])
+        locations.append(p + offset)
+        sentences.append(strip)
         i += 1
 
     return (sentences, locations) if return_loc else sentences
