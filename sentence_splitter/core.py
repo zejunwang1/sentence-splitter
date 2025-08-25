@@ -98,7 +98,7 @@ def split_text_into_sentences(
             while l > max_length:
                 move = 1
                 while move < maxMove:
-                    if sentence[max_length - move] in [',', '，', ';', '；', '、', '\t']:
+                    if sentence[max_length - move] in [',', '，', ';', '；', '\t']:
                         break
                     move += 1
                 if move == maxMove:
