@@ -1,11 +1,12 @@
 import os
+import re
 import regex
 import warnings
 from enum import Enum
 from typing import List, Tuple, Union
 
 def split_text_into_sentences(
-    text: str, merge_and_split: bool=False, return_loc: bool = False, min_length: int = 16, max_length: int = 256
+    text: str, fast: bool=True, merge_and_split: bool=False, return_loc: bool = False, min_length: int = 16, max_length: int = 256
 ) -> Union[List[str], Tuple[List[str], List[int]]]:
     """
     Split Chinese text into sentences.
@@ -13,6 +14,8 @@ def split_text_into_sentences(
     Parameters:
         text (`str`):
             Text to be split into individual sentences.
+        fast (`bool`, *optional*, defaults to `True`):
+            Whether to enable fast mode.
         merge_and_split (`bool`, *optional*, defaults to `False`):
             Whether to merge short sentences and split long sentences.
         return_loc (`bool`, *optional*, defaults to `False`):
@@ -46,18 +49,20 @@ def split_text_into_sentences(
             cur += n
             cur += 1
             continue
-
+        
         # Split by punctuation
-        paragraph = regex.sub(pattern=r'([。！？]+[”’]*)(.)', repl='\\1\n\\2', string=paragraph)
+        if fast:
+            paragraph = re.sub(pattern=r'([。！？!?]+[”’]*)(.)', repl='\\1\n\\2', string=paragraph)
+        else:
+            paragraph = re.sub(pattern=r'([。！？]+[”’]*)(.)', repl='\\1\n\\2', string=paragraph)
+            # Chinese character ending with !/?
+            paragraph = re.sub(pattern=r'([\u4e00-\u9fa5][\ ]*[!?]+[”’]*)(.)', repl='\\1\n\\2', string=paragraph)
+            paragraph = re.sub(pattern=r'([!?][\ ]*)([\u4e00-\u9fa5])', repl='\\1\n\\2', string=paragraph)
 
-        # Chinese character ending with !/?
-        paragraph = regex.sub(pattern=r'([\u4e00-\u9fa5][\ ]*[!?]+[”’]*)(.)', repl='\\1\n\\2', string=paragraph)
-        paragraph = regex.sub(pattern=r'([!?][\ ]*)([\u4e00-\u9fa5])', repl='\\1\n\\2', string=paragraph)
-
-        if n > max_length and not regex.findall(pattern=r'[。！？]', string=paragraph):
+        if n > max_length and not re.findall(pattern=r'[。！？]', string=paragraph):
             # Chinese character ending with ./;/；
-            paragraph = regex.sub(pattern=r'([\u4e00-\u9fa5][\ ]*[\.;；]+)(.)', repl='\\1\n\\2', string=paragraph)
-            paragraph = regex.sub(pattern=r'([\.;；][\ ]*)([\u4e00-\u9fa5])', repl='\\1\n\\2', string=paragraph)
+            paragraph = re.sub(pattern=r'([\u4e00-\u9fa5][\ ]*[\.;；]+)(.)', repl='\\1\n\\2', string=paragraph)
+            paragraph = re.sub(pattern=r'([\.;；][\ ]*)([\u4e00-\u9fa5])', repl='\\1\n\\2', string=paragraph)
 
         sentence_list = paragraph.split('\n')
 
@@ -101,6 +106,12 @@ def split_text_into_sentences(
                     if sentence[max_length - move] in [',', '，', ';', '；', '\t']:
                         break
                     move += 1
+                if move == maxMove:
+                    move = 1
+                    while move < maxMove:
+                        if sentence[max_length - move] in ['、', ' ']:
+                            break
+                        move += 1
                 if move == maxMove:
                     locations.append(cur)
                     sentences.append(sentence[ : max_length])
