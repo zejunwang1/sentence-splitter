@@ -15,6 +15,7 @@ pip install git+https://github.com/zejunwang1/sentence-splitter
 ```python
 def split_text_into_sentences(
     text: str,
+    fast: bool=True,
     merge_and_split: bool=False,
     return_loc: bool = False,
     min_length: int = 16,
@@ -23,6 +24,8 @@ def split_text_into_sentences(
 ```
 
 - `text`: Text to be split into individual sentences.
+
+- `fast`: Whether to enable fast mode.
 
 - `merge_and_split`: Whether to merge short sentences and split long sentences.
 
