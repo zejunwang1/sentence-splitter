@@ -15,8 +15,8 @@ pip install git+https://github.com/zejunwang1/sentence-splitter
 ```python
 def split_text_into_sentences(
     text: str,
-    fast: bool=True,
-    merge_and_split: bool=False,
+    fast: bool = True,
+    merge_and_split: bool = False,
     return_loc: bool = False,
     min_length: int = 16,
     max_length: int = 256
@@ -59,7 +59,7 @@ for sent, loc in zip(sents, locs):
 ```python
 def split_en_text_into_sentences(
     text: str,
-    split_long: bool=False,
+    split_long: bool = False,
     return_loc: bool = False,
     max_length: int = 1024
 )
