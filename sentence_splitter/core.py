@@ -6,7 +6,7 @@ from enum import Enum
 from typing import List, Tuple, Union
 
 def split_text_into_sentences(
-    text: str, fast: bool=True, merge_and_split: bool=False, return_loc: bool = False, min_length: int = 16, max_length: int = 256
+    text: str, fast: bool = True, merge_and_split: bool = False, return_loc: bool = False, min_length: int = 16, max_length: int = 256
 ) -> Union[List[str], Tuple[List[str], List[int]]]:
     """
     Split Chinese text into sentences.
@@ -186,7 +186,7 @@ __non_breaking_prefixes = load_non_breaking_prefix()
 
 
 def split_en_text_into_sentences(
-    text: str, split_long: bool=False, return_loc: bool = False, max_length: int = 1024
+    text: str, split_long: bool = False, return_loc: bool = False, max_length: int = 1024
 ) -> Union[List[str], Tuple[List[str], List[int]]]:
     """
     Split English text into sentences.
