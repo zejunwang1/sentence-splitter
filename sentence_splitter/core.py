@@ -59,7 +59,7 @@ def split_text_into_sentences(
             paragraph = re.sub(pattern=r'([\u4e00-\u9fa5][\ ]*[!?]+[”’]*)(.)', repl='\\1\n\\2', string=paragraph)
             paragraph = re.sub(pattern=r'([!?][\ ]*)([\u4e00-\u9fa5])', repl='\\1\n\\2', string=paragraph)
 
-        if n > max_length and not re.findall(pattern=r'[。！？]', string=paragraph):
+        if n > max_length and not re.search(pattern=r'[。！？]', string=paragraph):
             # Chinese character ending with ./;/；
             paragraph = re.sub(pattern=r'([\u4e00-\u9fa5][\ ]*[\.;；]+)(.)', repl='\\1\n\\2', string=paragraph)
             paragraph = re.sub(pattern=r'([\.;；][\ ]*)([\u4e00-\u9fa5])', repl='\\1\n\\2', string=paragraph)
